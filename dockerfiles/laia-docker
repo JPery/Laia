@@ -28,7 +28,7 @@ fi
 
 CMD=("$@");
 case "${CMD[0]}" in
-  create-model|decode|force-align|netout|reuse-model|train-ctc) CMD[0]="laia-${CMD[0]}";;
+  create-model|decode|force-align|netout|reuse-model|train-ctc|get-best-model) CMD[0]="laia-${CMD[0]}";;
 esac
 CMD=("${CMD[@]//$'\x27'/$'\x27\x22\x27\x22\x27'}");
 CMD=("${CMD[@]/#/$'\x27'}");

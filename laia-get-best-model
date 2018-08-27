@@ -1,0 +1,27 @@
+#!/usr/bin/env th
+
+require 'laia'
+
+local batcher = laia.RandomBatcher()
+local parser = laia.argparse(){
+  name = 'laia-get-best-model',
+  description = 'Saves the best model from a checkpoint t7 to a new file.'
+}
+
+-- Register laia.Version options
+laia.Version():registerOptions(parser)
+-- Register laia.log options.
+laia.log.registerOptions(parser)
+
+parser:argument('checkpoint', 'File containing the trained checkpoint/model.')
+parser:argument('output', 'Output file.')
+
+-- Parse options
+local opts = parser:parse()
+
+-- Load *BEST* model from the checkpoint.
+local model = laia.Checkpoint():load(opts.checkpoint):Best():getModel()
+assert(model ~= nil, 'No model was found in the checkpoint file!')
+
+-- Save best model to file.
+torch.save(opts.output, model)

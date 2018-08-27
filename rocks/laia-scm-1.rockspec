@@ -84,7 +84,8 @@ build = {
       "laia-force-align",
       "laia-netout",
       "laia-reuse-model",
-      "laia-train-ctc"
+      "laia-train-ctc",
+      "laia-get-best-model"
     }
   }
 }
