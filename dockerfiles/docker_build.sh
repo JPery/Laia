@@ -2,8 +2,8 @@
 
 set -ex
 
-CUDA="8.0";
-CUDNN="cudnn5-devel";
+CUDA="9.1";
+CUDNN="cudnn7-devel";
 OS="ubuntu16.04";
 
 mkdir -p logs;
@@ -14,10 +14,15 @@ mkdir -p logs;
   echo "time: $(( $(date +%s) - DS )) seconds";
 } 2>logs/torch-cuda$CUDA-$OS.err >logs/torch-cuda$CUDA-$OS.log;
 
+#SQUASH_LAYER=$(docker history mauvilsa/torch-cuda:$CUDA-$OS | awk '{if($1!="<missing>")L=$1;}END{print L;}');
+#sudo docker-squash --from-layer $SQUASH_LAYER --tag mauvilsa/torch-cuda:$CUDA-$OS-squashed mauvilsa/torch-cuda:$CUDA-$OS;
+
+cd ..;
+
 ### Laia ###
-REV=$(git log --date=iso ../laia/Version.lua Dockerfile laia-docker | sed -n '/^Date:/{s|^Date: *||;s| .*||;s|-|.|g;p;}' | sort -r | head -n 1);
+REV=$(git log --date=iso laia/Version.lua dockerfiles/Dockerfile dockerfiles/laia-docker | sed -n '/^Date:/{s|^Date: *||;s| .*||;s|-|.|g;p;}' | sort -r | head -n 1);
 { DS=$(date +%s);
-  #nvidia-docker build --no-cache -t mauvilsa/laia:$REV-cuda$CUDA-$OS --build-arg TORCH_CUDA_TAG=$CUDA-$OS -f ./Dockerfile ..;
-  nvidia-docker build -t mauvilsa/laia:$REV-cuda$CUDA-$OS --build-arg TORCH_CUDA_TAG=$CUDA-$OS -f ./Dockerfile ..;
+  #nvidia-docker build --no-cache -t mauvilsa/laia:$REV-cuda$CUDA-$OS --build-arg TORCH_CUDA_TAG=$CUDA-$OS -f dockerfiles/Dockerfile .;
+  nvidia-docker build            -t mauvilsa/laia:$REV-cuda$CUDA-$OS --build-arg TORCH_CUDA_TAG=$CUDA-$OS -f dockerfiles/Dockerfile .;
   echo "time: $(( $(date +%s) - DS )) seconds";
-} 2>logs/laia-cuda$CUDA-$OS.err >logs/laia-cuda$CUDA-$OS.log;
+} 2>dockerfiles/logs/laia-cuda$CUDA-$OS.err >dockerfiles/logs/laia-cuda$CUDA-$OS.log;

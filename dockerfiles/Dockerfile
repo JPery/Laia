@@ -24,10 +24,22 @@ RUN add-apt-repository -y ppa:george-edison55/cmake-3.x \
  && rm -rf /var/lib/apt/lists/* \
 
 ### Install warp-ctc and imgdistort ###
- && luarocks install http://raw.githubusercontent.com/baidu-research/warp-ctc/master/torch_binding/rocks/warp-ctc-scm-1.rockspec \
- && git clone --depth 1 https://github.com/jpuigcerver/imgdistort.git /tmp/imgdistort \
+ && git clone https://github.com/baidu-research/warp-ctc.git /tmp/warp-ctc \
+ && cd /tmp/warp-ctc \
+ && git checkout 6d5b8fac130638862d97dc48ef43a8d7b5a503bb \
+ && luarocks make torch_binding/rocks/warp-ctc-scm-1.rockspec \
+
+### Install imgdistort ###
+ && git clone https://github.com/jpuigcerver/imgdistort.git /tmp/imgdistort \
  && cd /tmp/imgdistort \
+ && git checkout a61c22d5fb751a732b0a0795af1984829fb0b46e \
  && luarocks make torch/imgdistort-scm-1.rockspec \
+
+### Install torch.cudnn R7 ###
+ && git clone https://github.com/soumith/cudnn.torch -b R7 /tmp/cudnn.torch \
+ && cd /tmp/cudnn.torch \
+ && git checkout f53fc2b365421155c102066db60674fb9b802ec2 \
+ && luarocks make cudnn-scm-1.rockspec \
 
 ### Install Laia ###
  && LIBRARY_PATH=$(echo "$LIBRARY_PATH" | sed 's|^:||; s|:$||; s|::|:|g;') \
