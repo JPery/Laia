@@ -1,5 +1,5 @@
 ### Input arguments ###
-ARG TORCH_CUDA_TAG=8.0-ubuntu16.04
+ARG TORCH_CUDA_TAG
 
 ### Start with CUDA Torch ###
 FROM mauvilsa/torch-cuda:$TORCH_CUDA_TAG
@@ -13,11 +13,7 @@ SHELL ["/bin/bash", "-c"]
 COPY . /tmp/Laia
 
 ### Install pre-requisites ###
-RUN add-apt-repository -y ppa:george-edison55/cmake-3.x \
- && apt-get update --fix-missing \
- && apt-get purge -y cmake \
- && apt-get install -y --no-install-recommends \
-      cmake \
+RUN apt-get install -y --no-install-recommends \
       libgoogle-glog-dev \
       libgtest-dev \
  && apt-get clean \

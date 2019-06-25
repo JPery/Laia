@@ -1,5 +1,5 @@
 ### Input arguments ###
-ARG CUDA_TAG=9.1-cudnn7-devel-ubuntu16.04
+ARG CUDA_TAG
 
 ### Start with NVIDIA cuDNN base image ###
 FROM nvidia/cuda:$CUDA_TAG
@@ -28,9 +28,10 @@ ENV \
  TORCH_NVCC_FLAGS="-D__CUDA_NO_HALF_OPERATORS__"
 
 ### Install Torch7 dependencies ###
-RUN git clone https://github.com/torch/distro.git ~/torch --recursive \
+# https://flummox-engineering.blogspot.com/2019/04/cmake-error-building-torch-CUDAcublasdeviceLIBRARY-not-found.html
+RUN git clone --single-branch --branch cuda10 --recursive https://github.com/nagadomi/distro.git ~/torch \
  && cd ~/torch \
- && git checkout b6ea0652502cda80ccc174c47459ec1b0dc2a9c6 \
+ && git checkout 5bdfcc419a53b822cce391f1d94477c709c6ba9d \
  && bash install-deps \
 
 ### Install Torch7 ###

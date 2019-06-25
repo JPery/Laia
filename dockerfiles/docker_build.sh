@@ -2,9 +2,9 @@
 
 set -ex
 
-CUDA="9.1";
+CUDA="10.1";
 CUDNN="cudnn7-devel";
-OS="ubuntu16.04";
+OS="ubuntu18.04";
 
 mkdir -p logs;
 
